@@ -1,15 +1,24 @@
-// const express = require('express')
 import express from 'express'
 import dotenv from 'dotenv'
-import testRouter from './router/test.js'
+import testRouter from './routes/test.js'
 
 const app = express()
+app.use(express.json())
 dotenv.config()
 
 const port = process.env.PORT
-app.set('port', port)
-app.use(async (req, res, next) => {
-  console.log(`[${Date()}|${req.ip}] ${req.method} ${req.path}`)
+// app.set('port', port)
+app.use(async (req, _, next) => {
+  switch (req.method) {
+    case 'GET':
+      console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path} query: ${JSON.stringify(req.query)}`)
+      break
+    case 'POST':
+      console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path} ${JSON.stringify(req.body)}`)
+      break
+    default:
+      console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path}`)
+  } 
   next()
 })
 
