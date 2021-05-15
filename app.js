@@ -1,16 +1,15 @@
 import express from 'express'
 import testRouter from './routes/testRouter.js'
-import { ENV, PORT } from './config.js'
+import { NODE_ENV, PORT } from './config.js'
 
 const app = express()
 app.use(express.json())
-
 app.use(async (req, _, next) => {
   switch (req.method) {
     case 'GET':
       console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path} query: ${JSON.stringify(req.query)}`)
       break
-    case 'POST':
+    case 'POST', 'PUT':
       console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path} body: ${JSON.stringify(req.body)}`)
       break
     default:
@@ -20,9 +19,15 @@ app.use(async (req, _, next) => {
 })
 
 app.use('/test', testRouter)
-
 app.get('/', async (req, res) => {
   res.json({})
 })
 
-app.listen(PORT, _ => { console.warn(`@@@ application is started. ENV: ${ENV}, PORT: ${PORT}`) })
+app.use((err, req, res, _) => {
+  console.error(`[${Date.now()}|${req.ip}] ${req.method} ${req.path}`, err)
+  const code = {
+    'BadRequestError': 400,
+  }[err.name] || 500
+  res.status(code).json({error: err.name})
+})
+app.listen(PORT, _ => { console.warn(`@@@ application is started. NODE_ENV: ${NODE_ENV}, PORT: ${PORT}`) })
