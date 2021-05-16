@@ -1,6 +1,17 @@
 import express from 'express'
 import testRouter from './routes/testRouter.js'
 import { NODE_ENV, PORT } from './config.js'
+import { sequelize } from './models/index.js'
+
+sequelize
+  .validate()
+  // .sync({ force: false })
+  .then(() => {
+    console.log('데이터베이스 연결')
+  })
+  .catch((err) => {
+    console.error('error!!!!', err)
+  })
 
 const app = express()
 app.use(express.json())
