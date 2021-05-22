@@ -1,7 +1,18 @@
 import { Sequelize } from 'sequelize'
-import { MYSQL } from '../config.js'
+import Config from '../config.js'
 
-export const sequelize = new Sequelize(MYSQL)
+const dbConfig = Config.MYSQL
+export const sequelize = new Sequelize({
+  database: dbConfig.DATABASE,
+  username: dbConfig.USERNAME,
+  password: dbConfig.PASSWORD,
+  host: dbConfig.HOST,
+  dialect: 'mysql',
+  pool: {
+    min: dbConfig.POOL_MIN,
+    max: dbConfig.POOL_MAX,
+  }
+})
 
 export const db = {
   sequelize: sequelize

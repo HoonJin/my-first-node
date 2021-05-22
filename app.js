@@ -1,6 +1,6 @@
 import express from 'express'
 import testRouter from './routes/testRouter.js'
-import { NODE_ENV, PORT } from './config.js'
+import Config from './config.js'
 import { sequelize } from './models/index.js'
 
 sequelize
@@ -41,4 +41,4 @@ app.use((err, req, res, _) => {
   }[err.name] || 500
   res.status(code).json({error: err.name})
 })
-app.listen(PORT, _ => { console.warn(`@@@ application is started. NODE_ENV: ${NODE_ENV}, PORT: ${PORT}`) })
+app.listen(Config.PORT, _ => { console.warn(`@@@ application is started. NODE_ENV: ${Config.NODE_ENV}, PORT: ${Config.PORT}`) })

@@ -1,19 +1,18 @@
 import dotenv from 'dotenv'
 
+const env = process.env.NODE_ENV || 'local'
 dotenv.config()
-
 const e = process.env
 
-export const NODE_ENV = e.NODE_ENV
-export const PORT = e.PORT
-export const MYSQL = {
-  database: e.MYSQL_DB,
-  username: e.MYSQL_USERNAME,
-  password: e.MYSQL_PASSWORD,
-  host: e.MYSQL_HOST,
-  dialect: 'mysql',
-  pool: {
-    min: parseInt(e.MYSQL_POOL_MIN),
-    max: parseInt(e.MYSQL_POOL_MAX),
+export default {
+  NODE_ENV: env,
+  PORT: e.PORT,
+  MYSQL: {
+    DATABASE: e.MYSQL_DATABASE,
+    USERNAME: e.MYSQL_USERNAME,
+    PASSWORD: e.MYSQL_PASSWORD,
+    HOST: e.MYSQL_HOST,
+    POOL_MIN: parseInt(e.MYSQL_POOL_MIN) || 5,
+    POOL_MAX: parseInt(e.MYSQL_POOL_MAX) || 20,
   }
 }

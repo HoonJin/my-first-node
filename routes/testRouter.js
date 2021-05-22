@@ -1,10 +1,9 @@
 import { Router } from 'express'
 import UAParser from 'ua-parser-js'
 
-const testRouter = Router()
+const router = Router()
 
-testRouter
-  .use((req, _, next) => {
+router.use((req, _, next) => {
     req.ua = UAParser(req.header('user-agent'))
     next()
   })
@@ -19,4 +18,4 @@ testRouter
       res.json({test: 'post'})
     })
 
-export default testRouter
+export default router
