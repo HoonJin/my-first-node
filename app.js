@@ -1,13 +1,14 @@
 import express from 'express'
 import testRouter from './routes/testRouter.js'
+import userRouter from './routes/userRouter.js'
 import Config from './config.js'
 import { sequelize } from './models/index.js'
 
 sequelize
-  .validate()
-  // .sync({ force: false })
-  .then(() => {
-    console.log('데이터베이스 연결')
+  // .validate()
+  .sync({ force: false })
+  .then((db) => {
+    console.log(`데이터베이스 연결 ${db.options.database}`)
   })
   .catch((err) => {
     console.error('error!!!!', err)
@@ -30,6 +31,7 @@ app.use(async (req, _, next) => {
 })
 
 app.use('/test', testRouter)
+app.use('', userRouter)
 app.get('/', async (req, res) => {
   res.json({})
 })

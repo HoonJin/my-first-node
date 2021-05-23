@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize'
 import Config from '../config.js'
+import User from './user.js'
 
 const dbConfig = Config.MYSQL
 export const sequelize = new Sequelize({
@@ -14,7 +15,9 @@ export const sequelize = new Sequelize({
   }
 })
 
-export const db = {
-  sequelize: sequelize
-}
- 
+User.init(sequelize)
+
+// export const db = {
+//   sequelize: sequelize,
+//   User: User
+// }
