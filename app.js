@@ -4,6 +4,9 @@ import userRouter from './routes/userRouter.js'
 import Config from './config.js'
 import { sequelize } from './models/index.js'
 import UAParser from 'ua-parser-js'
+import swaggerUI from 'swagger-ui-express'
+import swaggerJsDoc from 'swagger-jsdoc'
+
 
 sequelize
   // .validate()
@@ -38,6 +41,20 @@ app.use(userRouter)
 app.get('/', async (req, res) => {
   res.json({})
 })
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'test swagger',
+      version: '0.0.1',
+    }
+  },
+  apis: ['./routes/*.js']
+}
+
+const swaggerSpec = await swaggerJsDoc(swaggerOptions)
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 
 app.use((err, req, res, _) => {
   console.error(`[${Date.now()}|${req.ip}] ${req.method} ${req.path}`, err)
