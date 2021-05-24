@@ -3,6 +3,7 @@ import testRouter from './routes/testRouter.js'
 import userRouter from './routes/userRouter.js'
 import Config from './config.js'
 import { sequelize } from './models/index.js'
+import UAParser from 'ua-parser-js'
 
 sequelize
   // .validate()
@@ -16,12 +17,14 @@ sequelize
 
 const app = express()
 app.use(express.json())
+
 app.use(async (req, _, next) => {
+  req.ua = new UAParser(req.header('user-agent'))
   switch (req.method) {
     case 'GET':
       console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path} query: ${JSON.stringify(req.query)}`)
       break
-    case 'POST', 'PUT':
+    case 'POST':
       console.log(`[${Date.now()}|${req.ip}] ${req.method} ${req.path} body: ${JSON.stringify(req.body)}`)
       break
     default:
@@ -31,7 +34,7 @@ app.use(async (req, _, next) => {
 })
 
 app.use('/test', testRouter)
-app.use('', userRouter)
+app.use(userRouter)
 app.get('/', async (req, res) => {
   res.json({})
 })

@@ -1,18 +1,13 @@
 import { Router } from 'express'
-import UAParser from 'ua-parser-js'
 
 const router = Router()
-
-router.use((req, _, next) => {
-    req.ua = UAParser(req.header('user-agent'))
-    next()
-  })
+router
   .get('/exception', (req, res) => {
-    throw new Error(req.ua)
+    throw new Error(req.ua.getResult())
   })
   .route('/')
     .get(async (req, res) => {
-      res.json(req.ua)
+      res.json(req.ua.getResult())
     })
     .post(async (req, res) => {
       res.json({test: 'post'})
