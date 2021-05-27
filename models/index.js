@@ -1,5 +1,5 @@
 import { Sequelize } from 'sequelize'
-import Config from '../config.js'
+import Config from '../config/config.js'
 import User from './user.js'
 
 const dbConfig = Config.MYSQL

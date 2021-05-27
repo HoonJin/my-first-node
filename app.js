@@ -1,11 +1,12 @@
 import express from 'express'
-import testRouter from './routes/testRouter.js'
-import userRouter from './routes/userRouter.js'
-import Config from './config.js'
-import { sequelize } from './models/index.js'
 import UAParser from 'ua-parser-js'
 import swaggerUI from 'swagger-ui-express'
 import swaggerJsDoc from 'swagger-jsdoc'
+import testRouter from './routes/testRouter.js'
+import userRouter from './routes/userRouter.js'
+import SwaggerConfig from './config/swaggerConfig.js'
+import Config from './config/config.js'
+import { sequelize } from './models/index.js'
 
 
 sequelize
@@ -42,19 +43,10 @@ app.get('/', async (req, res) => {
   res.json({})
 })
 
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'test swagger',
-      version: '0.0.1',
-    }
-  },
-  apis: ['./routes/*.js']
+if (Config.NODE_ENV !== 'production') {
+  const swaggerSpec = await swaggerJsDoc(SwaggerConfig)
+  app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 }
-
-const swaggerSpec = await swaggerJsDoc(swaggerOptions)
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec))
 
 app.use((err, req, res, _) => {
   console.error(`[${Date.now()}|${req.ip}] ${req.method} ${req.path}`, err)
