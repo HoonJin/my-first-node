@@ -7,5 +7,5 @@ export default {
       version: '0.0.1',
     }
   },
-  apis: ['./routes/*.js']
+  apis: ['./config/swagger.yaml']
 }
